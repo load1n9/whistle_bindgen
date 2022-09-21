@@ -6,7 +6,7 @@
 ### install 
 
 ```
-deno install -Afq --unstable -n whistle_bindgen https://deno.land/x/whistle_bindgen/cli.ts
+deno install -Afq --unstable -n whistle_bindgen https://raw.githubusercontent.com/load1n9/whistle_bindgen/main/cli.ts
 ```
 test.whi
 ```rs
