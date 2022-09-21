@@ -6,7 +6,7 @@
 ### install 
 
 ```
-deno install -Afq --unstable -n whistle_bindgen https://deno.land/x/whistle_bindgen/cli.ts
+deno install -Afq --unstable -n whistle_bindgen https://crux.land/5dBLUg
 ```
 test.whi
 ```rs
@@ -25,9 +25,10 @@ whistle_bindgen ./test.whi ./test.js
 ### Usage
 
 ```typescript
-import { load, helloWorld} from "./test.js";
+import module from "./test.js";
 
-await load();
+// deno-lint-ignore no-explicit-any
+const { helloWorld }: any = await module();
 
 helloWorld();
 ```

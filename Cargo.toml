@@ -1,0 +1,27 @@
+
+
+[package]
+name = "whistle_deno"
+version = "0.1.0"
+authors = ["the Whistle authors"]
+edition = "2021"
+
+[lib]
+path = "./lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2.79"
+whistle_lexer = { git = "https://github.com/whistle-lang/whistle" }
+whistle_parser = { git = "https://github.com/whistle-lang/whistle" }
+whistle_common = { git = "https://github.com/whistle-lang/whistle" }
+whistle_ast = { git = "https://github.com/whistle-lang/whistle" }
+whistle_compiler = { git = "https://github.com/whistle-lang/whistle" }
+serde = { version = "1.0", features = ["derive"] }
+serde-wasm-bindgen = "0.4"
+
+[profile.release]
+lto = true
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]

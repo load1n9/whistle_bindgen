@@ -1,4 +1,4 @@
-import { compile, load } from "https://deno.land/x/whistle@0.1.0/mod.ts";
+import { compile, load, parseExports } from "./lib.ts";
 import { encode } from "https://deno.land/std@0.149.0/encoding/base64.ts";
 import { Language, minify } from "https://deno.land/x/minifier@v1.1.1/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.25.0/command/mod.ts";
@@ -9,8 +9,14 @@ const { args } = await new Command()
   .parse(Deno.args);
 
 await load();
+
+const generateFunction = (ident: string, params: string[] ) => `export function ${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")}) {\n    if(!loaded){\n        throw new Error("module not loaded")\n    }\n    return whistle_wasm.exports.${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")});\n}`
+
+const generateExports = (code: string): string => parseExports(code).filter(e => e.export).map(e => generateFunction(e.ident, e.params)).join("\n")
+
 const file = await Deno.readTextFile(args[0]);
 
+const exports = generateExports(file);
 const bits = compile(file);
 
 const imports = `{
@@ -34,19 +40,22 @@ const readString = (
     let end = ptr;
     while (view[end]) ++end;
     return (new TextDecoder()).decode(new Uint8Array(view.subarray(ptr, end)));
-  };
-  
+  };  
 let memory;
-async function load() {
+let whistle_wasm;
+let loaded = false;
+export async function load() {
+  if(!loaded){
     const mod = await WebAssembly.compile(decode("${encode(bits)}"));
-    const instance = await WebAssembly.instantiate(mod, ${imports});
-    memory = instance.exports.memory;
-    if (instance.exports.main) {
-      instance.exports.main();
+    whistle_wasm = await WebAssembly.instantiate(mod, ${imports});
+    loaded = true;
+    memory = whistle_wasm.exports.memory;
+    if (whistle_wasm.exports.main) {
+      whistle_wasm.exports.main();
     }
-    return instance.exports;
+  }
 }
-export { load as default};
+${exports}
 `;
 await Deno.writeTextFile(
   args[1] || args[0].replace(".whi", ".js"),
