@@ -1,4 +1,5 @@
 import { compile, load, parseExports } from "./lib.ts";
+import { TerminalSpinner } from "https://deno.land/x/spinners@v1.1.2/mod.ts";
 import { encode } from "https://deno.land/std@0.149.0/encoding/base64.ts";
 import { Language, minify } from "https://deno.land/x/minifier@v1.1.1/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.25.0/command/mod.ts";
@@ -10,10 +11,13 @@ const { args } = await new Command()
 
 await load();
 
-const generateFunction = (ident: string, params: string[] ) => `export function ${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")}) {\n    if(!loaded){\n        throw new Error("module not loaded")\n    }\n    return whistle_wasm.exports.${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")});\n}`
+const generateFunction = (ident: string, params: string[] ) => `export function ${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")}) {if(!loaded){throw new Error("module not loaded");}return whistle_wasm.exports.${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")});}`
 
-const generateExports = (code: string): string => parseExports(code).filter(e => e.export).map(e => generateFunction(e.ident, e.params)).join("\n")
+const generateExports = (code: string): string => parseExports(code).filter(e => e.export).map(e => generateFunction(e.ident, e.params)).join("\n");
+const time = Date.now();
+const terminalSpinner = new TerminalSpinner(`compiling ${args[0]} & generating bindings...`);
 
+terminalSpinner.start();
 const file = await Deno.readTextFile(args[0]);
 
 const exports = generateExports(file);
@@ -61,3 +65,5 @@ await Deno.writeTextFile(
   args[1] || args[0].replace(".whi", ".js"),
   minify(Language.JS, content),
 );
+
+terminalSpinner.succeed(`Generated ${args[1] || args[0].replace(".whi", ".js")}, took ${Date.now() - time} milliseconds!`);
