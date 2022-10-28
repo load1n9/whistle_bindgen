@@ -45,6 +45,7 @@ pub fn lex(text: &str) -> Result<String, String> {
     .map(|ok| format!("{:#?}", ok))
     .map_err(|err| format!("{:#?}", err))
 }
+
 #[derive(Serialize, Deserialize)]
 pub struct ExportFunction {
   export: bool,
@@ -103,18 +104,13 @@ fn to_json(vec: Vec<ProgramStmt>) -> Vec<JsValue> {
       } => compile_fn(export, inline, ident, params, ret_type),
       ProgramStmt::ValDecl { ident_typed, val } => compile_var(ident_typed, val),
       ProgramStmt::VarDecl { ident_typed, val } => compile_var(ident_typed, val),
-      // ProgramStmt::Stmt(Stmt) =>
-      // ProgramStmt::Import {
-      //   idents,
-      //   from,
-      //   imp_type,
-      // } => compile_import(compiler, idents, from, imp_type),
       __=> compile_null(),
     };
     vector.push(test);
   }
   vector
 }
+
 #[wasm_bindgen]
 pub fn parse_exports(text: &str) -> Vec<JsValue> {
   let result = parse_internal(text)

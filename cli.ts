@@ -11,28 +11,39 @@ const { args } = await new Command()
 
 await load();
 
-const generateFunction = (ident: string, params: string[] ) => `export function ${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")}) {if(!loaded){throw new Error("module not loaded");}return whistle_wasm.exports.${ident}(${params.map((e: string, i: index) => `$${i+1}`).join(" ,")});}`
+const generateFunction = (ident: string, params: string[]) =>
+  `export function ${ident}(${
+    params.map((_e: string, i: number) => `$${i + 1}`).join(" ,")
+  }) {if(!loaded){throw new Error("module not loaded");}return whistle_wasm.exports.${ident}(${
+    params.map((_e: string, i: number) => `$${i + 1}`).join(" ,")
+  });}`;
 
-const generateExports = (code: string): string => parseExports(code).filter(e => e.export).map(e => generateFunction(e.ident, e.params)).join("\n");
+const generateExports = (code: string): string =>
+  parseExports(code).filter((e) => e.export).map((e) =>
+    generateFunction(e.ident, e.params)
+  ).join("\n");
 const time = Date.now();
-const terminalSpinner = new TerminalSpinner(`compiling ${args[0]} & generating bindings...`);
+const terminalSpinner = new TerminalSpinner(
+  `compiling ${args[0]} & generating bindings...`,
+);
 
 terminalSpinner.start();
 const file = await Deno.readTextFile(args[0]);
 
+const imports = `{
+  io: {
+    println(arg) {
+      console.log(readString(arg, memory));
+    },
+    printInt(arg) {
+      console.log(arg);
+    },
+  },
+}`;
+
 const exports = generateExports(file);
 const bits = compile(file);
 
-const imports = `{
-    sys: {
-      printString(arg) {
-        console.log(readString(arg, memory));
-      },
-      printInt(arg) {
-        console.log(arg);
-      },
-    },
-}`;
 const content = `
 import { decode } from "https://deno.land/std@0.149.0/encoding/base64.ts";
 const readString = (
@@ -66,4 +77,8 @@ await Deno.writeTextFile(
   minify(Language.JS, content),
 );
 
-terminalSpinner.succeed(`Generated ${args[1] || args[0].replace(".whi", ".js")}, took ${Date.now() - time} milliseconds!`);
+terminalSpinner.succeed(
+  `Generated ${args[1] || args[0].replace(".whi", ".js")}, took ${
+    Date.now() - time
+  } milliseconds!`,
+);

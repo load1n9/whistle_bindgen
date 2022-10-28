@@ -12,7 +12,8 @@ export async function load(): Promise<void> {
   }
 }
 
-export function parseExports(source: string): string {
+// deno-lint-ignore no-explicit-any
+export function parseExports(source: string): any[] {
   if (!loaded) {
     throw notLoadedError;
   }
