@@ -1,33 +1,39 @@
 # Generate Javascript bindings for whistle
 
-
 ## Quickstart
 
-### install 
+### install
 
-```
+```sh
 deno install -Afq --unstable -n whistle_bindgen https://raw.githubusercontent.com/load1n9/whistle_bindgen/main/cli.ts
 ```
+
 test.whi
+
 ```rs
-export fn helloWorld(): i32 {
-    // prints Hello World to the console 
-    printString("Hello World!")
-    return 0
+builtin @core { proc_exit }
+
+export fn exit(code: i32): none {
+    proc_exit(code)
 }
+
+export fn main(): none {}
 ```
 
 ### compile
-```
+
+```sh
 whistle_bindgen ./test.whi ./test.js
 ```
 
 ### Usage
 
 ```typescript
-import { load, helloWorld} from "./test.js";
+import { load, exit} from "./test.js";
 
 await load();
 
-helloWorld();
+console.log("should print");
+exit();
+console.log("shouldn't print");
 ```

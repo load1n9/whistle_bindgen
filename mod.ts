@@ -49,9 +49,8 @@ export async function instantiate(file: Uint8Array) {
         console.log(arg);
       },
     },
+    wasi_unstable: context.exports,
   });
-  if (wasm.exports.main) {
-    (wasm.exports as any).main();
-  }
+  context.start(wasm);
   return (wasm.exports as any);
 }

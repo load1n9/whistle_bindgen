@@ -19,9 +19,8 @@ const generateFunction = (ident: string, params: string[]) =>
   });}`;
 
 const generateExports = (code: string): string =>
-  parseExports(code).filter((e) => e.export).map((e) =>
-    generateFunction(e.ident, e.params)
-  ).join("\n");
+  parseExports(code).filter((e) => e.export).filter((e) => e.ident !== "main")
+    .map((e) => generateFunction(e.ident, e.params)).join("\n");
 const time = Date.now();
 const terminalSpinner = new TerminalSpinner(
   `compiling ${args[0]} & generating bindings...`,
@@ -71,7 +70,9 @@ export async function load() {
   if(!loaded){
     const mod = await WebAssembly.compile(decode("${encode(bits)}"));
     whistle_wasm = await WebAssembly.instantiate(mod, ${imports});
-    context.start(whistle_wasm);
+    try {
+      context.start(whistle_wasm);
+    } catch(e) {}
     loaded = true;
     memory = whistle_wasm.exports.memory;
   }

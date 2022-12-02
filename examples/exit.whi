@@ -1,0 +1,5 @@
+builtin @core { proc_exit }
+
+export fn main(): none { 
+    proc_exit(0)
+}

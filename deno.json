@@ -1,0 +1,6 @@
+{
+    "tasks": {
+        "exit_example": "deno run -A --unstable examples/exit.ts",
+        "build": "deno run -A --unstable scripts/build.ts"
+    }
+}
