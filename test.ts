@@ -1,5 +1,11 @@
 import { run } from "./mod.ts";
 
-await run(
-    "export fn main(): i32 { return 0 }"
-)
+await run(`
+builtin @core { proc_exit }
+export fn main(): none { 
+    // exits
+    proc_exit(0)
+}`);
+
+// should not be run
+console.log("hi there");

@@ -39,6 +39,7 @@ const imports = `{
       console.log(arg);
     },
   },
+  wasi_unstable: context.exports,
 }`;
 
 const exports = generateExports(file);
@@ -46,6 +47,13 @@ const bits = compile(file);
 
 const content = `
 import { decode } from "https://deno.land/std@0.149.0/encoding/base64.ts";
+import Context from "https://deno.land/std@0.167.0/wasi/snapshot_preview1.ts";
+
+const context = new Context({
+  args: Deno.args,
+  env: Deno.env.toObject(),
+});
+
 const readString = (
     ptr,
     memory = undefined,
@@ -63,11 +71,9 @@ export async function load() {
   if(!loaded){
     const mod = await WebAssembly.compile(decode("${encode(bits)}"));
     whistle_wasm = await WebAssembly.instantiate(mod, ${imports});
+    context.start(whistle_wasm);
     loaded = true;
     memory = whistle_wasm.exports.memory;
-    if (whistle_wasm.exports.main) {
-      whistle_wasm.exports.main();
-    }
   }
 }
 ${exports}

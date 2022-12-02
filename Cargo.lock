@@ -172,9 +172,9 @@ checksum = "1c38c045535d93ec4f0b4defec448e4291638ee608530863b1e2ba115d4fff7f"
 
 [[package]]
 name = "wasm-encoder"
-version = "0.10.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa9d9bf45fc46f71c407837c9b30b1e874197f2dc357588430b21e5017d290ab"
+checksum = "d443c5a7daae71697d97ec12ad70b4fe8766d3a0f4db16158ac8b781365892f7"
 dependencies = [
  "leb128",
 ]
@@ -182,7 +182,7 @@ dependencies = [
 [[package]]
 name = "whistle_ast"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle#086d61028a128b7e3f737036e3362f24569d6d27"
+source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
 dependencies = [
  "whistle_common",
 ]
@@ -190,12 +190,12 @@ dependencies = [
 [[package]]
 name = "whistle_common"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle#086d61028a128b7e3f737036e3362f24569d6d27"
+source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
 
 [[package]]
 name = "whistle_compiler"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle#086d61028a128b7e3f737036e3362f24569d6d27"
+source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
 dependencies = [
  "byteorder",
  "wasm-encoder",
@@ -220,7 +220,7 @@ dependencies = [
 [[package]]
 name = "whistle_lexer"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle#086d61028a128b7e3f737036e3362f24569d6d27"
+source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
 dependencies = [
  "whistle_common",
 ]
@@ -228,7 +228,7 @@ dependencies = [
 [[package]]
 name = "whistle_parser"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle#086d61028a128b7e3f737036e3362f24569d6d27"
+source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
 dependencies = [
  "whistle_ast",
  "whistle_common",

@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { compile, load } from "./lib.ts";
+import Context from "https://deno.land/std@0.167.0/wasi/snapshot_preview1.ts";
 
 export const readString = (
   ptr: any,
@@ -11,6 +12,11 @@ export const readString = (
   while (view[end]) ++end;
   return (new TextDecoder()).decode(new Uint8Array(view.subarray(ptr, end)));
 };
+
+const context = new Context({
+  args: Deno.args,
+  env: Deno.env.toObject(),
+});
 
 let memory: any;
 
@@ -26,10 +32,9 @@ export async function run(code: string) {
           console.log(arg);
         },
       },
+      wasi_unstable: context.exports,
     });
-    if (wasm.exports.main) {
-      (wasm.exports as any).main();
-    }
+    context.start(wasm);
     return (wasm.exports as any)
 }
 
