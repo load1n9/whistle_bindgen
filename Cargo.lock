@@ -182,7 +182,7 @@ dependencies = [
 [[package]]
 name = "whistle_ast"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
+source = "git+https://github.com/whistle-lang/whistle?branch=main#1156f39de3dfcb8243875b66507af131a19a125d"
 dependencies = [
  "whistle_common",
 ]
@@ -190,12 +190,12 @@ dependencies = [
 [[package]]
 name = "whistle_common"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
+source = "git+https://github.com/whistle-lang/whistle?branch=main#1156f39de3dfcb8243875b66507af131a19a125d"
 
 [[package]]
 name = "whistle_compiler"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
+source = "git+https://github.com/whistle-lang/whistle?branch=main#1156f39de3dfcb8243875b66507af131a19a125d"
 dependencies = [
  "byteorder",
  "wasm-encoder",
@@ -220,7 +220,7 @@ dependencies = [
 [[package]]
 name = "whistle_lexer"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
+source = "git+https://github.com/whistle-lang/whistle?branch=main#1156f39de3dfcb8243875b66507af131a19a125d"
 dependencies = [
  "whistle_common",
 ]
@@ -228,7 +228,7 @@ dependencies = [
 [[package]]
 name = "whistle_parser"
 version = "0.1.0"
-source = "git+https://github.com/whistle-lang/whistle?branch=wasi#7072b1d17e70d965c8daf9cf11f662759789fd6e"
+source = "git+https://github.com/whistle-lang/whistle?branch=main#1156f39de3dfcb8243875b66507af131a19a125d"
 dependencies = [
  "whistle_ast",
  "whistle_common",
